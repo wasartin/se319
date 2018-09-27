@@ -2,6 +2,10 @@
 var Calc = {
 
 Model : {
+	onScreen : {id: "onScreen", type: "array", value: ""},
+	operator : {id: "operator", type: "text", value: ""},
+	operands : {id: "operands", type: "float", value1: "", value2: ""},
+	memory : {id: "memory", type: "array", value:""}
 },
 
 
@@ -19,19 +23,83 @@ View : {
 	button9 : {id: "button9", type: "button", value: 9, onclick:""},
 	button10 : {id: "buttonAdd", type: "button", value: "+", onclick:""},
 	button11 : {id: "buttonSub", type: "button", value: "-", onclick:""},
-	button12 : {id: "buttonMultiply", type: "button", value: "*", onClick:""},
-	button13 : {id: "buttonDivide", type: "button", value: "/", onClick:""},
-	button14 : {id: "buttonDot", type: "button", value: ".", onClick: ""},
-	button15: {id: "buttonEquals", type: "button", value: "=", onClick:""},
-	button16 : {id: "buttonC", type: "button", value: "C", onClick: ""},
-	button17 : {id: "buttonMC", type: "button", value: "MC", onClick:""},
-	button18 : {id: "buttonMS", type: "button", value: "M-", onClick:""},
-	button19 : {id: "buttonMP", type: "button", value: "M+", onClick:""},
-	button20 : {id: "buttonMR", type: "button", value: "MR", onClick:""}
+	button12 : {id: "buttonMultiply", type: "button", value: "*", onclick:""},
+	button13 : {id: "buttonDivide", type: "button", value: "/", onclick:""},
+	button14 : {id: "buttonDot", type: "button", value: ".", onclick: ""},
+	button15 : {id: "buttonEquals", type: "button", value: "=", onclick:""},
+	button16 : {id: "buttonC", type: "button", value: "C", onclick: ""},
+	button17 : {id: "buttonMC", type: "button", value: "MC", onclick:""},
+	button18 : {id: "buttonMS", type: "button", value: "M-", onclick:""},
+	button19 : {id: "buttonMP", type: "button", value: "M+", onclick:""},
+	button20 : {id: "buttonMR", type: "button", value: "MR", onclick:""}
 },
 
 Controller : {
 
+	handler : function(element){
+		if(!isNaN(element.value)){
+			document.getElementById("textRow").value += element.value;
+			//if operator is empty, then its value 1, else value 2
+			if(document.getElementById("operator") == null){
+				document.getElementById("operands").value1 = element.value;
+			}else{
+				document.getElementById("operands").value2 += element.value;
+			}
+			document.getElementById("onScreen").value += element.value;
+		}
+		else if(isNaN(element.value)){
+			switch(element.value){
+				case "C":
+					document.getElementById("textRow").value = "";
+					break;
+				case ".":
+					document.getElementById("textRow").value += element.value;
+					
+					//change curr element to a decimal
+					break;
+				//M+/- add or subtract to memory
+				case "M+":
+					break;
+				case "M-":
+					break;
+				//MR recall current memory value
+				case "MR":
+					break;
+			//MC set memory register to zero
+				case "MC":
+					break;
+				case "+":
+					document.getElementById("textRow").value += element.value;
+					document.getElementById("operator").value = element.value;
+					document.getElementById("onScreen").value += element.value
+					break;
+				case "=":
+					var operator, elt1, elt2;
+					if(Calc.Controller.isFull == true){
+						operator = document.getElementById("operator").value;
+						elt1 = document.getElementById("operands").value1;
+						elt2 = document.getElementById("operands").value2;
+						switch (operator){
+							case "+":
+								var result = parseInt(elt1) + parseInt(elt2);
+								break;
+						}
+						document.getElementById("textRow").value = result;
+					}
+					break;
+				
+				}
+		}
+	},
+
+	isFull : function(){
+		if(document.getElementById("operator").value != "" &&
+			document.getElementById("operand").value1 != "" &&
+			document.getElementById("operand").value2 != ""){
+				return true;
+			}
+		return false;
+	}
 },
 
 run : function() {
@@ -39,7 +107,6 @@ run : function() {
   console.log(Calc.display());
   return Calc.display();
 },
-
 
 displayElement : function (element) {
   var s = "<input ";
@@ -94,36 +161,7 @@ display : function() {
 
 attachHandlers : function() {
 	for( var i = 0; i < 21; i++){
-		Calc.View["button" + i].onclick = "Calc.numberHandler(this)";
-	}
-},
-
-numberHandler : function(element){
-	if(!isNaN(element.value)){
-		document.getElementById("textRow").value += element.value;
-	}
-	else if(isNaN(element.value)){
-		switch(element.value){
-			case "C":
-				document.getElementById("textRow").value = "";
-				break;
-			//M+/- add or subtract to memory
-			case "M+":
-				break;
-			case "M-":
-				break;
-			//MR recall current memory value
-			case "MR":
-				break;
-			//MC set memory register to zero
-			case "MC":
-				break;
-			case "+":
-				document.getElementById("textRow").value += "+";
-				break;
-			case "=":
-				
-		}
+		Calc.View["button" + i].onclick = "Calc.Controller.handler(this)";
 	}
 }
 
