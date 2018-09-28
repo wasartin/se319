@@ -2,10 +2,10 @@
 var Calc = {
 
 Model : {
-	onScreen : {id: "onScreen", type: "array", value: ""},
+	onScreen : {id: "onScreen", type: "text", value: ""},
 	operator : {id: "operator", type: "text", value: ""},
-	operands : {id: "operands", type: "float", value1: "", value2: ""},
-	memory : {id: "memory", type: "array", value:""}
+	numbers : {id: "operands", type: "text", value1: "", value2: ""},
+	memory : {id: "memory", type: "text", value:""}
 },
 
 
@@ -35,26 +35,31 @@ View : {
 },
 
 Controller : {
-
 	handler : function(element){
 		if(!isNaN(element.value)){
 			document.getElementById("textRow").value += element.value;
 			//if operator is empty, then its value 1, else value 2
-			if(document.getElementById("operator") == null){
-				document.getElementById("operands").value1 = element.value;
+			if(Calc.Model.operator.value == ""){
+				Calc.Model.numbers.value1 += element.value;
 			}else{
-				document.getElementById("operands").value2 += element.value;
+				Calc.Model.numbers.value2 += element.value;
 			}
-			document.getElementById("onScreen").value += element.value;
+			Calc.Model.onScreen.value += element.value;
 		}
 		else if(isNaN(element.value)){
 			switch(element.value){
 				case "C":
 					document.getElementById("textRow").value = "";
+					Calc.Controller.reset();
 					break;
 				case ".":
 					document.getElementById("textRow").value += element.value;
-					
+					if(Calc.Model.operator.value == ""){
+						Calc.Model.numbers.value1 += element.value;
+					}else {
+						Calc.Model.numbers.value2 += element.value;
+					}
+					break;
 					//change curr element to a decimal
 					break;
 				//M+/- add or subtract to memory
@@ -70,35 +75,53 @@ Controller : {
 					break;
 				case "+":
 					document.getElementById("textRow").value += element.value;
-					document.getElementById("operator").value = element.value;
-					document.getElementById("onScreen").value += element.value
+					Calc.Model.operator.value = element.value;
+					Calc.Model.onScreen.value += element.value
+					break;
+				case "*":
+					document.getElementById("textRow").value += element.value;
+					Calc.Model.operator.value = element.value;
+					Calc.Model.onScreen.value += element.value
+					break;
+				case "-":
+					document.getElementById("textRow").value += element.value;
+					Calc.Model.operator.value = element.value;
+					Calc.Model.onScreen.value += element.value
+					break;
+				case "/":
+					document.getElementById("textRow").value += element.value;
+					Calc.Model.operator.value = element.value;
+					Calc.Model.onScreen.value += element.value
 					break;
 				case "=":
 					var operator, elt1, elt2;
-					if(Calc.Controller.isFull == true){
-						operator = document.getElementById("operator").value;
-						elt1 = document.getElementById("operands").value1;
-						elt2 = document.getElementById("operands").value2;
-						switch (operator){
-							case "+":
-								var result = parseInt(elt1) + parseInt(elt2);
-								break;
-						}
-						document.getElementById("textRow").value = result;
+					operator = Calc.Model.operator.value;
+					elt1 = Calc.Model.numbers.value1;
+					elt2 = Calc.Model.numbers.value2;
+					switch (operator){
+						case "+":
+							var result = parseFloat(elt1) + parseFloat(elt2);
+							break;
+						case "*":
+							var result = parseFloat(elt1) * parseFloat(elt2);
+							break;
+						case "-":
+							var result = parseFloat(elt1) - parseFloat(elt2);
+							break;
+						case "/":
+							var result = parseFloat(elt1) / parseFloat(elt2);
+							break;
 					}
+					document.getElementById("textRow").value = result;
+					Calc.Model.numbers.value1 = result;
+					Calc.Model.numbers.value2 = "";
 					break;
-				
 				}
 		}
 	},
-
-	isFull : function(){
-		if(document.getElementById("operator").value != "" &&
-			document.getElementById("operand").value1 != "" &&
-			document.getElementById("operand").value2 != ""){
-				return true;
-			}
-		return false;
+	
+	reset : function(){
+		Calc.Model.numbers.value1 = Calc.Model.numbers.value2 = Calc.Model.operator.value = "";
 	}
 },
 
