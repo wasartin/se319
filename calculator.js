@@ -5,7 +5,7 @@ Model : {
 	onScreen : {id: "onScreen", type: "text", value: ""},
 	operator : {id: "operator", type: "text", value: ""},
 	numbers : {id: "operands", type: "text", value1: "", value2: ""},
-	memory : {id: "memory", type: "text", value:""}
+	memory : {id: "memory", type: "text", value: "0"}
 },
 
 
@@ -60,38 +60,21 @@ Controller : {
 						Calc.Model.numbers.value2 += element.value;
 					}
 					break;
-					//change curr element to a decimal
-					break;
 				//M+/- add or subtract to memory
 				case "M+":
+					Calc.Model.memory.value = parseFloat(Calc.Model.numbers.value1) + parseFloat(Calc.Model.memory.value);
 					break;
 				case "M-":
+					Calc.Model.memory.value = parseFloat(Calc.Model.memory.value) - parseFloat(Calc.Model.numbers.value1);
 					break;
 				//MR recall current memory value
 				case "MR":
+					document.getElementById("textRow").value = Calc.Model.memory.value;
+					Calc.Model.numbers.value1 = Calc.Model.memory.value;
 					break;
 			//MC set memory register to zero
 				case "MC":
-					break;
-				case "+":
-					document.getElementById("textRow").value += element.value;
-					Calc.Model.operator.value = element.value;
-					Calc.Model.onScreen.value += element.value
-					break;
-				case "*":
-					document.getElementById("textRow").value += element.value;
-					Calc.Model.operator.value = element.value;
-					Calc.Model.onScreen.value += element.value
-					break;
-				case "-":
-					document.getElementById("textRow").value += element.value;
-					Calc.Model.operator.value = element.value;
-					Calc.Model.onScreen.value += element.value
-					break;
-				case "/":
-					document.getElementById("textRow").value += element.value;
-					Calc.Model.operator.value = element.value;
-					Calc.Model.onScreen.value += element.value
+					Calc.Model.memory.value = "0";
 					break;
 				case "=":
 					var operator, elt1, elt2;
@@ -116,12 +99,29 @@ Controller : {
 					Calc.Model.numbers.value1 = result;
 					Calc.Model.numbers.value2 = "";
 					break;
+				//making a negative number
+				case "-":
+					//add red button highlight
+					if(Calc.Model.numbers.value1 == ""){
+						document.getElementById("textRow").value += element.value;
+						Calc.Model.numbers.value1 += "-";
+						break;
+					}
+				default : // +, -, *, /
+					if(Calc.Model.numbers.value1 == ""){
+						break;
+					}
+					document.getElementById("textRow").value += element.value;
+					Calc.Model.operator.value = element.value;
+					Calc.Model.onScreen.value += element.value
+					break;
 				}
 		}
 	},
 	
 	reset : function(){
-		Calc.Model.numbers.value1 = Calc.Model.numbers.value2 = Calc.Model.operator.value = "";
+		Calc.Model.numbers.value1 = Calc.Model.numbers.value2 = 
+		Calc.Model.operator.value = "";
 	}
 },
 
