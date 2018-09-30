@@ -74,8 +74,8 @@ rightButton.onclick = function(){
 }
 
 function drawHead(){
-
-	if(xDirection + xIncrease < width && yDirection + yIncrease < height){
+	if((xDirection + xIncrease < width && yDirection + yIncrease < height)
+		&& (xDirection + xIncrease >= 0 && yDirection + yIncrease >= 0)){
 		xDirection += xIncrease;
 		yDirection += yIncrease;
 		context.fillStyle = "#FF0000";
