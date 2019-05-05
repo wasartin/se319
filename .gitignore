@@ -11,15 +11,6 @@ local.properties
 .loadpath
 .recommenders
 
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-
-# PyDev specific (Python IDE for Eclipse)
-*.pydevproject
-
 # CDT-specific (C/C++ Development Tooling)
 .cproject
 
@@ -58,5 +49,4 @@ local.properties
 # other
 labs/
 practice/
-Scheduley/
 homework/
