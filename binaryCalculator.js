@@ -3,11 +3,12 @@ var rs = require('readline-sync');
 var input1 = rs.question('1st Number: ');
 var action = rs.question('Enter the action{+,-,*,/,%,<<,>>,&,|,~}: ');
 var input2;
-//?? Shouldn't run
 if(action != '<<' || action != '>>' || action != '~'){
   input2 = rs.question('2nd Number: ');
 }
+
 var decimalResult = '';
+var normalOperationFlag = 0;
 
 switch(action){
   case '+':
@@ -19,6 +20,7 @@ switch(action){
     var two = parseInt(input2, 2);
     decimalResult = one + action + two;
     decimalResult = eval(decimalResult);
+    normalOperationFlag = 1;
     break;
   //bit shift left 101 << 1010
   case '<<':
@@ -65,4 +67,7 @@ switch(action){
 }
 
 var binaryResult = decimalResult.toString(2);
+if(normalOperationFlag == 0){
+  decimalResult = parseInt(decimalResult, 2);
+}
 console.log('binary: ' + binaryResult + ', decimal: ' + decimalResult);
