@@ -62,10 +62,12 @@ Controller : {
 					break;
 				//M+/- add or subtract to memory
 				case "M+":
-					Calc.Model.memory.value = parseFloat(Calc.Model.numbers.value1) + parseFloat(Calc.Model.memory.value);
+					Calc.Model.memory.value = parseFloat(Calc.Model.numbers.value1) 
+						+ parseFloat(Calc.Model.memory.value);
 					break;
 				case "M-":
-					Calc.Model.memory.value = parseFloat(Calc.Model.memory.value) - parseFloat(Calc.Model.numbers.value1);
+					Calc.Model.memory.value = parseFloat(Calc.Model.memory.value) 
+						- parseFloat(Calc.Model.numbers.value1);
 					break;
 				//MR recall current memory value
 				case "MR":
