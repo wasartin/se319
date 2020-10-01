@@ -1,0 +1,7 @@
+README
+
+Run Server
+Run one or more Clients
+Once a Client enter a message, their message will be on the server
+One a second client enters a message, the first client's message
+	will appear on their screen.
